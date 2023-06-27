@@ -5,14 +5,15 @@ import (
 	"time"
 
 	"github.com/projectdiscovery/fastdialer/fastdialer"
-	"github.com/projectdiscovery/katana/pkg/output"
-	"github.com/projectdiscovery/katana/pkg/utils/extensions"
-	"github.com/projectdiscovery/katana/pkg/utils/filters"
-	"github.com/projectdiscovery/katana/pkg/utils/scope"
 	"github.com/projectdiscovery/ratelimit"
 	errorutil "github.com/projectdiscovery/utils/errors"
 	urlutil "github.com/projectdiscovery/utils/url"
 	wappalyzer "github.com/projectdiscovery/wappalyzergo"
+
+	"github.com/projectdiscovery/katana/pkg/output"
+	"github.com/projectdiscovery/katana/pkg/utils/extensions"
+	"github.com/projectdiscovery/katana/pkg/utils/filters"
+	"github.com/projectdiscovery/katana/pkg/utils/scope"
 )
 
 // CrawlerOptions contains helper utilities for the crawler
@@ -41,6 +42,8 @@ func NewCrawlerOptions(options *Options) (*CrawlerOptions, error) {
 	extensionsValidator := extensions.NewValidator(options.ExtensionsMatch, options.ExtensionFilter)
 
 	dialerOpts := fastdialer.DefaultOptions
+	dialerOpts.CacheType = fastdialer.Memory
+	dialerOpts.MaxRetries = options.Retries
 	if len(options.Resolvers) > 0 {
 		dialerOpts.BaseResolvers = options.Resolvers
 	}
