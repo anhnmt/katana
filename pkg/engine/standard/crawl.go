@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"strings"
+	"time"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/projectdiscovery/katana/pkg/engine/common"
@@ -19,6 +20,8 @@ import (
 
 // makeRequest makes a request to a URL returning a response interface.
 func (c *Crawler) makeRequest(s *common.CrawlSession, request *navigation.Request) (*navigation.Response, error) {
+	start := time.Now()
+
 	response := &navigation.Response{
 		Depth:        request.Depth + 1,
 		RootHostname: s.Hostname,
@@ -83,6 +86,7 @@ func (c *Crawler) makeRequest(s *common.CrawlSession, request *navigation.Reques
 	response.Reader, err = goquery.NewDocumentFromReader(bytes.NewReader(data))
 	response.StatusCode = resp.StatusCode
 	response.Headers = utils.FlattenHeaders(resp.Header)
+	response.Duration = time.Since(start).String()
 
 	resp.ContentLength = int64(len(data))
 

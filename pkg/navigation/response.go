@@ -25,6 +25,7 @@ type Response struct {
 	Depth        int               `json:"-"`
 	Reader       *goquery.Document `json:"-"`
 	StatusCode   int               `json:"status_code,omitempty"`
+	Duration     string            `json:"duration,omitempty"`
 	Headers      Headers           `json:"headers,omitempty"`
 	Body         string            `json:"body,omitempty"`
 	RootHostname string            `json:"-"`
