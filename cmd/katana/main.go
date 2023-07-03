@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	runner2 "github.com/projectdiscovery/katana/pkg/runner"
 	"math"
 	"os"
 	"os/signal"
@@ -10,7 +11,6 @@ import (
 
 	"github.com/projectdiscovery/goflags"
 	"github.com/projectdiscovery/gologger"
-	"github.com/projectdiscovery/katana/internal/runner"
 	"github.com/projectdiscovery/katana/pkg/output"
 	"github.com/projectdiscovery/katana/pkg/types"
 	errorutil "github.com/projectdiscovery/utils/errors"
@@ -28,11 +28,11 @@ func main() {
 	}
 
 	if options.HealthCheck {
-		gologger.Print().Msgf("%s\n", runner.DoHealthCheck(options, flagSet))
+		gologger.Print().Msgf("%s\n", runner2.DoHealthCheck(options, flagSet))
 		os.Exit(0)
 	}
 
-	katanaRunner, err := runner.New(options)
+	katanaRunner, err := runner2.New(options)
 	if err != nil || katanaRunner == nil {
 		if options.Version {
 			return
@@ -128,7 +128,7 @@ pipelines offering both headless and non-headless crawling.`)
 	)
 
 	flagSet.CreateGroup("update", "Update",
-		flagSet.CallbackVarP(runner.GetUpdateCallback(), "update", "up", "update katana to latest version"),
+		flagSet.CallbackVarP(runner2.GetUpdateCallback(), "update", "up", "update katana to latest version"),
 		flagSet.BoolVarP(&options.DisableUpdateCheck, "disable-update-check", "duc", false, "disable automatic katana update check"),
 	)
 
